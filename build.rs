@@ -17,7 +17,9 @@ use std::env;
 #[cfg(unix)]
 use std::ffi::OsString;
 use std::fs;
+#[cfg(unix)]
 use std::io::{stderr, Write};
+#[cfg(unix)]
 use std::path::Path;
 use std::path::PathBuf;
 use std::str;
@@ -229,8 +231,6 @@ fn build(metadata: &Metadata) {
         .run()
         .unwrap_or_else(|e| panic!("copying source tree failed: {}", e));
 
-    cmd!("autoreconf").dir(&metadata.build_dir).run().expect("");
-
     let nmake = |args: &[&str]| {
         cmd("nmake", args)
             .dir(&metadata.build_dir)
@@ -243,12 +243,12 @@ fn build(metadata: &Metadata) {
         .unwrap_or_else(|e| panic!("nmake prep failed: {}", e));
 
     // Build.
-    nmake(&[])
+    nmake(&["-f", "Makefile.in"])
         .run()
         .unwrap_or_else(|e| panic!("nmake build failed: {}", e));
 
     // Install.
-    nmake(&["install"])
+    nmake(&["-f", "Makefile.in", "install"])
         .run()
         .unwrap_or_else(|e| panic!("nmake install failed: {}", e));
 }
