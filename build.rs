@@ -18,7 +18,6 @@ use std::env;
 use std::ffi::OsString;
 use std::fs;
 use std::io::{stderr, Write};
-#[cfg(unix)]
 use std::path::Path;
 use std::path::PathBuf;
 use std::str;
