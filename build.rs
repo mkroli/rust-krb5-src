@@ -224,19 +224,12 @@ fn build(metadata: &Metadata) {
     // The Windows build system doesn't seem to support out-of-tree builds, so
     // copy the source tree into the build directory since we're not allowed to
     // build in the checkout directly.
-    let output = cmd!("robocopy", "krb5\\src", &metadata.build_dir, "/s", "/e")
+    cmd!("robocopy", "krb5\\src", &metadata.build_dir, "/s", "/e")
         .unchecked()
         .run()
         .unwrap_or_else(|e| panic!("copying source tree failed: {}", e));
-    // https://docs.microsoft.com/en-us/troubleshoot/windows-server/backup-and-storage/return-codes-used-robocopy-utility
-    if !matches!(output.status.code(), Some(0..=7)) {
-        panic!("copying source tree failed: {:?}", output);
-    }
 
-    cmd!("autoreconf")
-        .dir(Path::new("krb5").join("src"))
-        .run()
-        .expect("");
+    cmd!("autoreconf").dir(&metadata.build_dir).run().expect("");
 
     let nmake = |args: &[&str]| {
         cmd("nmake", args)
