@@ -36,7 +36,9 @@ jobs:
     steps:
     - if: contains(matrix.os, 'ubuntu')
       run: sudo apt-get install -y yasm
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
+      with:
+        submodules: true
     - name: Install Rust (rustup)
       run: rustup update ${{ matrix.rust }} --no-self-update && rustup default ${{ matrix.rust }}
     - run: cargo test --no-default-features --features=${{ matrix.features }}
@@ -51,7 +53,9 @@ jobs:
             os: windows-latest
             rust: stable
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
+      with:
+        submodules: true
     - name: Install Rust (rustup)
       run: rustup update ${{ matrix.rust }} --no-self-update && rustup default ${{ matrix.rust }}
     - shell: cmd
@@ -64,7 +68,7 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
       with:
         submodules: true
     - name: Install Rust
