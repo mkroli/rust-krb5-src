@@ -85,10 +85,17 @@ fn build(metadata: &Metadata) {
     {
         let mut cppflags = env::var("CPPFLAGS").ok().unwrap_or_else(String::new);
         let mut cflags = env::var("CFLAGS").ok().unwrap_or_else(String::new);
+        let mut ldflags = env::var("LDFLAGS").ok().unwrap_or_else(String::new);
 
         // Some platforms require that we explicitly request
         // position-independent code in our static libraries.
         cflags += " -fPIC";
+
+        // specific linker flags
+        #[cfg(target_os = "macos")]
+        {
+            ldflags += " -framework Kerberos";
+        }
 
         // If OpenSSL has been vendored, point libkrb5 at the vendored headers.
         if let Ok(openssl_root) = env::var("DEP_OPENSSL_ROOT") {
@@ -105,6 +112,7 @@ fn build(metadata: &Metadata) {
             "--disable-nls".into(),
             format!("CPPFLAGS={}", cppflags),
             format!("CFLAGS={}", cflags),
+            format!("LDFLAGS={}", ldflags),
         ];
 
         // If we're cross-compiling, let configure know.
