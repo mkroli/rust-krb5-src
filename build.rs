@@ -234,6 +234,11 @@ fn build(metadata: &Metadata) {
         panic!("copying source tree failed: {:?}", output);
     }
 
+    cmd!("autoreconf")
+        .dir(Path::new("krb5").join("src"))
+        .run()
+        .expect("");
+
     let nmake = |args: &[&str]| {
         cmd("nmake", args)
             .dir(&metadata.build_dir)
