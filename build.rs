@@ -115,6 +115,12 @@ fn build(metadata: &Metadata) {
             configure_args.push(format!("--host={}", metadata.target));
         }
 
+        cmd!("autoreconf")
+            .dir(Path::new("krb5").join("src"))
+            .set_target_env_vars(metadata)
+            .run()
+            .expect("");
+
         let configure_path = Path::new("krb5").join("src").join("configure");
 
         let configure = cmd(configure_path, &configure_args)
