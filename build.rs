@@ -167,8 +167,7 @@ fn build(metadata: &Metadata) {
                         || cfg!(target_os = "openbsd")
                         || cfg!(target_os = "netbsd")
                         || cfg!(target_os = "freebsd")
-                        || cfg!(target_os = "bitrig")
-                        || cfg!(target_os = "dragonflybsd")) =>
+                        || cfg!(target_os = "dragonfly")) =>
                 {
                     make_flags = s.clone()
                 }
