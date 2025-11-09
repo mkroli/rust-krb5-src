@@ -60,6 +60,8 @@ jobs:
         submodules: true
     - name: Install cygwin
       uses: cygwin/cygwin-install-action@master
+      with:
+        packages: autoconf
     - name: Install Rust (rustup)
       run: rustup update ${{ matrix.rust }} --no-self-update && rustup default ${{ matrix.rust }}
     - shell: cmd
